@@ -2,7 +2,11 @@
 
 if($_GET){
   
-  include_once("controllers/controller_usuario.php");
+  function __autoload($classe) {
+    if (file_exists("models/{$classe}.class.php")) {
+      include_once "models/{$classe}.class.php";
+    }
+  }
   
   if(isset($_GET['id'])){
     $id = trim($_GET['id']);
@@ -10,12 +14,9 @@ if($_GET){
     $id = 0;
   }
 
-  $init = new BaoUsuario();
-  $init->setId($id);
-
   if (intval($id) != 0){
-    $retorno = $init->deletar($init);
-    if(intval($retorno) == 1){
+    $init = new Usuario($id);
+    if(intval($init->deletar()) == 1){
       header("Location: index.php?status=success&msg=Cadastro deletado com sucesso");
     } else {
       header("Location: index.php?status=danger&msg=Houve um erro ao tentar deletar o registro");

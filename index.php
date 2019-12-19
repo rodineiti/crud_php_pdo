@@ -1,6 +1,10 @@
 <?php 
 
-include_once("controllers/controller_usuario.php");
+function __autoload($classe) {
+  if (file_exists("models/{$classe}.class.php")) {
+    include_once "models/{$classe}.class.php";
+  }
+}
 
 if(isset($_GET['status'])){
     $status = trim($_GET['status']);
@@ -14,8 +18,13 @@ if(isset($_GET['msg'])){
     $msg = "";
 }
 
-$usuario = new BaoUsuario();
-$usuarios = $usuario->listar($usuario);
+$usuario = new Usuario();
+
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$perPage = 10;
+$pages = $usuario->count();
+
+$usuarios = $usuario->listar(($page - 1) * $perPage, $perPage);
 
 ?>
 <!DOCTYPE html>
@@ -86,7 +95,7 @@ $usuarios = $usuario->listar($usuario);
                 <tr>
                     <td><?=$value['id']?></td>
                     <td><?=$value['name']?></td>
-                    <td><?=$value['email']?></td>
+                    <td><?=$value['emails']?></td>
                     <td>
                       <a href="frm_usuario.php?id=<?=$value['id']?>" class="btn btn-success" alt="Editar Cadastro" title="Editar Cadastro">
                         <i class="glyphicon glyphicon-pencil"></i>
@@ -105,6 +114,23 @@ $usuarios = $usuario->listar($usuario);
             ?>
         </tbody>
       </table>
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          
+          <?php
+          
+          $pages = ceil($pages / $perPage);
+          
+          for ($i = 1; $i <= $pages; $i++): ?>
+            <?php if ($i == $page): ?>
+              <li class="active"><a href="#"><?=$i?></a></li>
+            <?php else: ?>
+              <li><a href="?url=index&page=<?=$i?>"><?=$i?></a></li>
+            <?php endif; ?>
+          <?php endfor; ?>
+
+        </ul>
+      </nav>      
     </div>
 
     <!-- MODAL Exclusão-->

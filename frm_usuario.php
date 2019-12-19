@@ -1,6 +1,10 @@
 <?php  
 
-include_once("controllers/controller_usuario.php");
+function __autoload($classe) {
+  if (file_exists("models/{$classe}.class.php")) {
+    include_once "models/{$classe}.class.php";
+  }
+}
 
 if(isset($_GET['id'])){
   $id = (int)$_GET['id'];
@@ -9,21 +13,20 @@ if(isset($_GET['id'])){
 }
 
 $nome = "";
-$email = "";
+$emails = "";
 
 if(intval($id) != 0){
-  $init = new BaoUsuario();
-  $init->setId($id);
-  $result = $init->buscar_id($init);
+  $init = new Usuario($id);
+  $result = $init->buscar_id();
   
   if (count($result) > 0) {
     $id = $result['id'];
     $nome = $result['name'];
-    $email = $result['email'];    
+    $emails = $result['emails'];
   } else {
     $id = 0;
     $nome = "";
-    $email = "";
+    $emails = "";
   }
 }
 
@@ -80,8 +83,8 @@ if(intval($id) != 0){
                   </div>      
                   <div class="row">
                     <div class="form-group">
-                      <label>Email</label>
-                      <input type="email" name="email" id="email" class="form-control" placeholder="Informe o e-mail" value="<?=$email?>" required>
+                      <label>Emails</label>
+                      <input type="emails" name="emails" id="emails" class="form-control" placeholder="Informe o e-mail" value="<?=$emails?>" required>
                     </div>
                     
                   </div>

@@ -1,5 +1,15 @@
 <?php
 /**
+ * [ php config ] Altera modo de erro e exibição do var_dump.
+ * display_errors: Erros devem ser exibidos.
+ * error_reporting: Todos os tipos de erros
+ * overload_var_dump: Omitir a linha de caminho do var_dump.
+ */
+ini_set("display_errors", 1);
+ini_set("error_reporting", E_ALL);
+ini_set('xdebug.overload_var_dump', 1);
+
+/**
  * Classe de conexão ao banco de dados usando PDO no padrão Singleton.
  * Modo de Usar:
  * require_once './Database.class.php';
@@ -14,10 +24,10 @@ class Database
     private function __construct()
     {
         # Informações sobre o banco de dados:
-        $db_host = "localhost";
-        $db_nome = "cms";
-        $db_usuario = "root";
-        $db_senha = "root";
+        $db_host = "";
+        $db_nome = "";
+        $db_usuario = "";
+        $db_senha = "";
         $db_driver = "mysql";
 
         try
